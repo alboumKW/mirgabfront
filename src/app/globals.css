@@ -1,0 +1,237 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-poppins);
+  --font-arabic: var(--font-noto-arabic);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+/* Font classes */
+.font-display {
+  font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
+}
+
+.font-arabic {
+  font-family: var(--font-noto-arabic), system-ui, -apple-system, sans-serif;
+}
+
+/* Language-specific font application */
+[lang="ar"] * {
+  font-family: var(--font-noto-arabic), system-ui, -apple-system, sans-serif;
+}
+
+[lang="en"] h1, [lang="en"] h2, [lang="en"] h3, [lang="en"] h4, [lang="en"] h5, [lang="en"] h6 {
+  font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .header-bar {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .gap-2,
+[dir="rtl"] .gap-3,
+[dir="rtl"] .gap-4 {
+  gap: inherit;
+}
+
+/* Custom animations */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+/* Pixel Effects */
+@keyframes pixel-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(240deg);
+  }
+}
+
+@keyframes pixel-glow {
+  0%, 100% {
+    box-shadow: 0 0 2px currentColor, 0 0 4px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 4px currentColor, 0 0 8px currentColor;
+  }
+}
+
+@keyframes pixel-matrix {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+.pixel-effect {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: currentColor;
+  animation: pixel-float 3s ease-in-out infinite;
+}
+
+.pixel-glow {
+  animation: pixel-glow 3s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.pixel-matrix {
+  animation: pixel-matrix 4s ease-in-out infinite;
+}
+
+/* Retro grid effect */
+.retro-grid {
+  background-image: 
+    linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: grid-move 20s linear infinite;
+}
+
+@keyframes grid-move {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 20px 20px, 20px 20px;
+  }
+}
+
+/* Pixelated border effect */
+.pixel-border {
+  position: relative;
+}
+
+.pixel-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+  background-size: 400% 400%;
+  animation: pixel-border-animate 3s ease infinite;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+@keyframes pixel-border-animate {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pixel-border-subtle {
+  0%, 100% {
+    background-position: 0% 50%;
+    opacity: 0.3;
+  }
+  50% {
+    background-position: 25% 50%;
+    opacity: 0.5;
+  }
+}
+
+.pixel-border-subtle {
+  position: relative;
+}
+
+.pixel-border-subtle::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6, #3b82f6);
+  background-size: 200% 200%;
+  animation: pixel-border-subtle 8s ease infinite;
+  border-radius: inherit;
+  z-index: -1;
+}
+
+/* 8-bit style button */
+.pixel-button {
+  position: relative;
+  background: linear-gradient(45deg, #1e40af, #7c3aed);
+  border: none;
+  clip-path: polygon(
+    0 0, calc(100% - 8px) 0, 100% 8px,
+    100% 100%, 8px 100%, 0 calc(100% - 8px)
+  );
+}
+
+/* Smooth transitions for language toggle */
+* {
+  transition: transform 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
