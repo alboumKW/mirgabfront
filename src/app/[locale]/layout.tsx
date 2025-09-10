@@ -30,10 +30,7 @@ export const metadata: Metadata = {
   title: "Mirgab Studio - Coming Soon",
   description: "Something amazing is brewing at Mirgab Studio",
   icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: '32x32' }
-    ],
+    icon: { url: '/icon.svg', type: 'image/svg+xml' },
     apple: '/apple-icon.svg',
   },
 };
