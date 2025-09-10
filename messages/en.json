@@ -24,5 +24,6 @@
   "move": "Move",
   "softDrop": "Soft drop",
   "hardDrop": "Hard drop",
+  "rotate": "Rotate",
   "dropButton": "DROP"
 }

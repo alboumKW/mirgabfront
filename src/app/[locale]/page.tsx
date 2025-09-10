@@ -1,11 +1,12 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
 import LanguageToggle from '@/components/LanguageToggle';
-import EmailSubscription from '@/components/EmailSubscription';
+import dynamic from 'next/dynamic';
+const EmailSubscription = dynamic(() => import('@/components/EmailSubscription'), { ssr: false });
 import PixelEffects from '@/components/PixelEffects';
 import MaybeTetris from '@/components/MaybeTetris';
 import { Gamepad2, Github, Twitter, Instagram } from 'lucide-react';
-
-export const runtime = 'edge';
 
 export default function Home() {
   const t = useTranslations();

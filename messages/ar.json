@@ -24,5 +24,6 @@
   "move": "تحريك",
   "softDrop": "إسقاط بطيء",
   "hardDrop": "إسقاط سريع",
+  "rotate": "دوران",
   "dropButton": "إسقاط"
 }

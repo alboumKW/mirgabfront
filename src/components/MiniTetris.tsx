@@ -177,6 +177,44 @@ export default function MiniTetris() {
     setCurrentPiece(prev => ({ ...prev, position: { ...prev.position, y: newY } }));
   }, [board, currentPiece, gameOver, isPaused, gameStarted]);
 
+  // Rotate piece
+  const rotatePiece = useCallback(() => {
+    if (gameOver || isPaused || !gameStarted) return;
+
+    // Rotate the shape 90 degrees clockwise
+    const rotatedShape = currentPiece.shape[0].map((_, index) =>
+      currentPiece.shape.map(row => row[index]).reverse()
+    );
+
+    const rotatedPiece = {
+      ...currentPiece,
+      shape: rotatedShape
+    };
+
+    // Check if rotation is valid, if not try wall kicks
+    const wallKicks = [
+      { x: 0, y: 0 },   // No adjustment
+      { x: -1, y: 0 },  // Move left
+      { x: 1, y: 0 },   // Move right
+      { x: 0, y: -1 },  // Move up
+    ];
+
+    for (const kick of wallKicks) {
+      const testPosition = {
+        x: currentPiece.position.x + kick.x,
+        y: currentPiece.position.y + kick.y
+      };
+
+      if (canPlacePiece(board, rotatedPiece, testPosition)) {
+        setCurrentPiece({
+          ...rotatedPiece,
+          position: testPosition
+        });
+        return;
+      }
+    }
+  }, [board, currentPiece, gameOver, isPaused, gameStarted]);
+
   // Handle keyboard input
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -197,6 +235,10 @@ export default function MiniTetris() {
           e.preventDefault();
           dropPiece();
           break;
+        case 'ArrowUp':
+          e.preventDefault();
+          rotatePiece();
+          break;
         case 'p':
         case 'P':
           e.preventDefault();
@@ -209,7 +251,7 @@ export default function MiniTetris() {
       window.addEventListener('keydown', handleKeyPress);
       return () => window.removeEventListener('keydown', handleKeyPress);
     }
-  }, [movePiece, moveDown, dropPiece, gameStarted, isRTL]);
+  }, [movePiece, moveDown, dropPiece, rotatePiece, gameStarted, isRTL]);
 
   // Game loop
   useEffect(() => {
@@ -317,6 +359,7 @@ export default function MiniTetris() {
                 <div className={`text-xs sm:text-sm grid grid-cols-2 gap-1 sm:block sm:space-y-1 ${isRTL ? 'text-right' : 'text-left'}`}>
                   <div>{isRTL ? '→ ←' : '← →'} {t('move')}</div>
                   <div>↓ {t('softDrop')}</div>
+                  <div>↑ {t('rotate')}</div>
                   <div>Space: {t('hardDrop')}</div>
                   <div>P: {t('pause')}</div>
                 </div>
@@ -338,7 +381,23 @@ export default function MiniTetris() {
       {gameStarted && (
         <div className="lg:hidden mt-4 w-full max-w-sm">
           <div className="text-center text-gray-400 text-xs mb-2">{t('touchControls')}:</div>
-          <div className={`grid grid-cols-4 gap-2 ${isRTL ? 'direction-rtl' : ''}`}>
+          <div className="grid grid-cols-2 gap-2 mb-2">
+            <button
+              onClick={rotatePiece}
+              disabled={gameOver}
+              className="p-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white rounded-lg pixel-border font-bold text-xs"
+            >
+              ↻ {t('rotate')}
+            </button>
+            <button
+              onClick={dropPiece}
+              disabled={gameOver}
+              className="p-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg pixel-border font-bold text-xs"
+            >
+              {t('dropButton')}
+            </button>
+          </div>
+          <div className={`grid grid-cols-3 gap-2 ${isRTL ? 'direction-rtl' : ''}`}>
             {isRTL ? (
               <>
                 <button
@@ -361,13 +420,6 @@ export default function MiniTetris() {
                   className="p-3 bg-white/10 hover:bg-white/20 disabled:bg-gray-600 text-white rounded-lg pixel-border font-bold"
                 >
                   ←
-                </button>
-                <button
-                  onClick={dropPiece}
-                  disabled={gameOver}
-                  className="p-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg pixel-border font-bold text-xs"
-                >
-                  {t('dropButton')}
                 </button>
               </>
             ) : (
@@ -392,13 +444,6 @@ export default function MiniTetris() {
                   className="p-3 bg-white/10 hover:bg-white/20 disabled:bg-gray-600 text-white rounded-lg pixel-border font-bold"
                 >
                   →
-                </button>
-                <button
-                  onClick={dropPiece}
-                  disabled={gameOver}
-                  className="p-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg pixel-border font-bold text-xs"
-                >
-                  {t('dropButton')}
                 </button>
               </>
             )}
